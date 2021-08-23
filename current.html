@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Current HTML</title>
+</head>
+<body>
+
+  <button onclick="initOtherWindnow()">Get otherWindow</button>
+  <button onclick="postmsg()">postmsg</button>
+  <hr>
+  <button onclick="window.location.href = './main.html'">To Main</button>
+  <script>
+    // 接收消息
+    window.addEventListener('message', receiveMsg, false)
+    function receiveMsg(e) {
+      var origin = e.origin
+      console.log('Receive message.', '\n', '----------------------', '\n','Origin: ' + origin, '\n', 'Data: ' + e.data, '\n', e)
+    }
+
+    var otherWindow = null
+    var baidu = 'https://www.baidu.com/'
+    var current = window.origin + '/current.html'
+    var other = 'http://127.0.0.1:5500/other.html'
+
+    // 初始化otherWindow
+    function initOtherWindnow() {
+      otherWindow = window.open(other)
+    }
+
+    // 发送消息
+    function postmsg() {
+      const data = 'Current-' + Date.now()
+      const origin = 'http://127.0.0.1:5500'
+      otherWindow.postMessage(data, origin)
+    }
+  </script>
+</body>
+</html>

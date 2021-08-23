@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Main HTML</title>
+</head>
+<body>
+
+  <button onclick="postmsg()">Count in Worker</button>
+  <button onclick="countNum()">Count in Main</button>
+  <hr>
+  <input class="calc-num" type="text" value="10">
+  <span style="font-size: 12px; color: #ccc;">e.g: 10 or 40</span>
+  <p class="timestamp"></p>
+  <script src="./fb.js"></script>
+  <script>
+
+    var calcNumDOM = document.querySelector('.calc-num')
+
+    var timestamp = document.querySelector('.timestamp')
+    setInterval(() => {
+      timestamp.innerHTML = Date.now()
+    }, 1);
+
+
+    var myWorker = new Worker('./worker.js')
+    
+    function postmsg() {
+      console.log('Enter worker process.');
+      myWorker.postMessage(calcNumDOM.value)
+    }
+
+    myWorker.onmessage = function(e) {
+      console.log('Main receive message from worker and data is: ', e.data);
+
+      // 获取结果后终止worker
+      // myWorker.terminate()
+    }
+
+    function countNum (){
+      const res =  fb(calcNumDOM.value)
+      console.log('Count in Main: ', res);
+    }
+
+    // postmsg()
+  </script>
+
+  <!-- <script src="./jybdsdk-1.0.3.js"></script>
+  <script src="./webbridge-1.0.3.js"></script> -->
+</body>
+</html>
